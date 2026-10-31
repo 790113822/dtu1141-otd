@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- OTD 0.6.8 插件：编译 DTU-1141 报告解析器为独立 dll -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>OpenTabletDriver.DTU</AssemblyName>
+    <RootNamespace>OpenTabletDriver.Configurations.Parsers.Wacom.DTU</RootNamespace>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.6.8</Version>
+  </PropertyGroup>
+
+  <!-- 引用 OTD 插件 API。
+       注意: NuGet 上 0.6.8+ 只支持 net10.0, 而本机 SDK 是 8.x。
+       因此使用 0.6.4 (net6.0 兼容) 编译 net8.0 插件 dll, 可被宿主 0.6.8.1 (net10.0) 加载. -->
+  <ItemGroup>
+    <PackageReference Include="OpenTabletDriver.Plugin" Version="0.6.4" />
+    <PackageReference Include="OpenTabletDriver.Configurations" Version="0.6.4" />
+  </ItemGroup>
+</Project>
