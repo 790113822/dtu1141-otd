@@ -30,14 +30,18 @@ dotnet build "$PROJ" -c Release
 DLL="$OUT/OpenTabletDriver.DTU.dll"
 [ -f "$DLL" ] || { echo "[ERR] 编译产物不存在: $DLL"; exit 1; }
 
+CONFIG_DIR="$HOME/.config/OpenTabletDriver/Configurations"
+
 echo "==> 安装到 $DEST_DIR"
 # 0.6.x 的插件加载: ~/.config/OpenTabletDriver/Plugins/<插件名>/xxx.dll
 mkdir -p "$DEST_DIR/Dtu1141"
 cp -v "$DLL" "$DEST_DIR/Dtu1141/OpenTabletDriver.DTU.dll"
 
-if [ -d "$HOME/.config/OpenTabletDriver/Configurations" ]; then
-  cp -v "$PLUGIN_JSON" "$HOME/.config/OpenTabletDriver/Configurations/DTU1141.json"
-fi
+# OTD 0.6.x 只从 Configurations 子目录加载设备配置
+mkdir -p "$CONFIG_DIR"
+cp -v "$PLUGIN_JSON" "$CONFIG_DIR/DTU1141.json"
+# 清理旧版脚本放在应用数据根目录的配置（OTD 不会读取）
+rm -f "$HOME/.config/OpenTabletDriver/DTU1141.json"
 
 echo
 echo "==> 完成。请重启 OTD 并在 GUI 中选择 'Wacom DTU-1141'。"

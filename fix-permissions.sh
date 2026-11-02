@@ -6,8 +6,15 @@
 set -euo pipefail
 
 RULES="/etc/udev/rules.d/70-opentabletdriver-dtu1141.rules"
+LEGACY_RULES="/etc/udev/rules.d/70-opentabletdriver.rules"
 
 [ "$(id -u)" -eq 0 ] || { echo "[ERR] 请用 sudo 运行: sudo $0"; exit 1; }
+
+# 旧版 install.sh 写入了与官方规则同名的文件，会覆盖 /usr/lib/udev/rules.d/ 下的官方规则
+if [ -f "$LEGACY_RULES" ] && head -n1 "$LEGACY_RULES" | grep -q 'OpenTabletDriver - Wacom DTU-1141'; then
+  rm -f "$LEGACY_RULES"
+  echo "==> 已删除会覆盖官方规则的旧文件: $LEGACY_RULES"
+fi
 
 cat > "$RULES" <<'EOF'
 # Wacom DTU-1141 (VID 056a:PID 0336) - OpenTabletDriver
